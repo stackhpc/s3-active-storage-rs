@@ -1,0 +1,761 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://stackhpc.github.io/reductionist-rs/architecture/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Architecture - Reductionist</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.2505c338.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#ef5552">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#architecture-and-implementation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Reductionist" class="md-header__button md-logo" aria-label="Reductionist" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Reductionist
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/stackhpc/reductionist-rs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Reductionist" class="md-nav__button md-logo" aria-label="Reductionist" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Reductionist
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/stackhpc/reductionist-rs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Architecture
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Architecture
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#axum-web-server" class="md-nav__link">
+    Axum web server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-request-data" class="md-nav__link">
+    API request data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s3-object-download" class="md-nav__link">
+    S3 object download
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filters-and-compression" class="md-nav__link">
+    Filters and compression
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-operation-trait" class="md-nav__link">
+    The Operation trait
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operations" class="md-nav__link">
+    Operations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    Error handling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resource-management" class="md-nav__link">
+    Resource management
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpu-bound-work" class="md-nav__link">
+    CPU-bound work
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monitoring" class="md-nav__link">
+    Monitoring
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tracing-and-profiling" class="md-nav__link">
+    Tracing and profiling
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pyactivestorage/" class="md-nav__link">
+        PyActiveStorage Integration
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#axum-web-server" class="md-nav__link">
+    Axum web server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-request-data" class="md-nav__link">
+    API request data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s3-object-download" class="md-nav__link">
+    S3 object download
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filters-and-compression" class="md-nav__link">
+    Filters and compression
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-operation-trait" class="md-nav__link">
+    The Operation trait
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operations" class="md-nav__link">
+    Operations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    Error handling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resource-management" class="md-nav__link">
+    Resource management
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpu-bound-work" class="md-nav__link">
+    CPU-bound work
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monitoring" class="md-nav__link">
+    Monitoring
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tracing-and-profiling" class="md-nav__link">
+    Tracing and profiling
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/stackhpc/reductionist-rs/edit/master/docs/architecture.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="architecture-and-implementation">Architecture and implementation<a class="headerlink" href="#architecture-and-implementation" title="Permanent link">&para;</a></h1>
+<p>Reductionist is written in <a href="https://www.rust-lang.org/">Rust</a>, a language that is rapidly gaining popularity for a variety of use cases.
+It provides high level abstractions with low runtime overhead, a modern toolchain, and has a unique approach that provides safe automatic memory management without garbage collection.
+While the Rust standard library is not as comprehensive as some other "batteries included" languages, the <a href="https://crates.io/">crates.io</a> ecosystem is relatively mature and provides a number of de-facto standard libraries.
+Reductionist is built on top of a number of popular open source components.</p>
+<p>A few properties make it relatively easy to build a conceptual mental model of how Reductionist works.</p>
+<ul>
+<li>All operations share the same request processing pipeline.</li>
+<li>The request processing pipeline for each request is a fairly linear sequence of steps.</li>
+<li>There is no persistent state.</li>
+<li>The only external service that is interacted with is an S3-compatible object store.</li>
+</ul>
+<p>The more challenging aspects of the system are the lower level details of asynchronous programming, memory management, the Rust type system and working with multi-dimensional arrays.</p>
+<p>A diagram of the request processing pipeline is shown in Figure 1.</p>
+<figure>
+<p><img alt="Request processing flow diagram" src="../img/reductionist-request-pipeline.svg" title="Figure 1: Request processing pipeline flow diagram" />
+  </p>
+<figcaption>Figure 1: Request processing pipeline flow diagram</figcaption>
+</figure>
+<p>The "Perform numerical operation" step depends on the type of numerical operation being performed.
+A diagram of this step for the sum operation is shown in Figure 2.</p>
+<figure>
+<p><img alt="Sum operation flow diagram" src="../img/reductionist-operation.svg" title="Figure 2: Sum operation flow diagram" />
+  </p>
+<figcaption>Figure 2: Sum operation flow diagram</figcaption>
+</figure>
+<h2 id="axum-web-server">Axum web server<a class="headerlink" href="#axum-web-server" title="Permanent link">&para;</a></h2>
+<p><a href="https://docs.rs/axum">Axum</a> is an asynchronous web framework that performs well in <a href="https://github.com/programatik29/rust-web-benchmarks/blob/master/result/hello-world.md">various benchmarks</a> and is built on top of various popular components, including the <a href="https://hyper.rs/">hyper</a> HTTP library.
+It integrates well with <a href="https://tokio.rs/">Tokio</a>, the most popular asynchronous Rust runtime, and allows us to easily define an API route for each operation.
+<a href="https://docs.rs/axum/latest/axum/extract/index.html">Extractors</a> make it easy to consume data from the request in a type-safe way.
+The operation request handler is the <code>operation_handler</code> function in <code>src/app.rs</code>.</p>
+<h2 id="api-request-data">API request data<a class="headerlink" href="#api-request-data" title="Permanent link">&para;</a></h2>
+<p>The JSON request data is deserialised into the <code>RequestData</code> struct defined in <code>src/models.rs</code> using the <a href="https://serde.rs/">serde</a> library.
+Serde handles conversion errors at the type level, while further validation of request data invariants is performed using the <a href="https://crates.io/crates/validator">validator</a> crate.</p>
+<h2 id="s3-object-download">S3 object download<a class="headerlink" href="#s3-object-download" title="Permanent link">&para;</a></h2>
+<p>Object data is downloaded from the object store using the <a href="https://docs.aws.amazon.com/sdk-for-rust/">AWS SDK</a>.
+The <code>S3Client</code> struct in <code>src/s3_client.rs</code> provides a simplified wrapper around the AWS SDK.
+Typically we will be operating on a "storage chunk", a hyperslab within the larger dataset that the object contains.
+In this case a byte range is specified in the S3 <code>GetObject</code> request to avoid downloading the whole object.
+The AWS SDK is asynchronous and does provide a streaming response, however we read the whole storage chunk into memory to simplify later stages of the pipeline.
+Storage chunks are expected to be small enough (O(MiB)) that this should not be a problem.</p>
+<p>Construction of <a href="https://docs.rs/aws-sdk-s3/latest/aws_sdk_s3/client/struct.Client.html">aws_sdk_s3::Client</a> structs is a relatively slow task.
+A key performance improvement involves the use of a shared client object for each combination of object store URL and credentials.
+This is implemented using the <code>S3ClientMap</code> in <code>src/s3_client.rs</code> and benchmarked in <code>benches/s3_client.rs</code>.</p>
+<p>Downloaded storage chunk data is returned to the request handler as a <a href="https://docs.rs/bytes/latest/bytes/struct.Bytes.html">Bytes</a> object, which is a wrapper around a <code>u8</code> (byte) array.</p>
+<h2 id="filters-and-compression">Filters and compression<a class="headerlink" href="#filters-and-compression" title="Permanent link">&para;</a></h2>
+<p>When a variable in a netCDF, HDF5 or Zarr dataset is created, it may be compressed to reduce storage requirements.
+Additionally, prior to compression one or more filters may be applied to the data with the aim of increasing the compression ratio.
+When consuming such data, Reductionist needs to reverse any compression and filters applied.
+The filter pipeline is implemented in <code>src/filter_pipeline.rs</code>.</p>
+<p>First, if a compression algorithm is specified in the request data, the storage chunk is decompressed using the same algorithm.
+Currently the Gzip and Zlib algorithms are supported using the <a href="https://docs.rs/flate2">flate2</a> and <a href="https://docs.rs/zune-inflate">zune-inflate</a> libraries respectively.
+This mix of libraries was chosen based on performance benchmarks in <code>benches/compression.rs</code>.
+Compression is implemented in <code>src/compression.rs</code>.</p>
+<p>Next, if any filters are specified in the request data, they are decoded in reverse order.
+Currently the byte shuffle filter is supported.
+This filter reorders the data to place the Nth bytes of each data value together, with the aim of grouping leading zeroes.
+The shuffle filter is implemented in <code>src/filters/shuffle.rs</code>, and has several optimisations including loop unrolling that were benchmarked using <code>benches/shuffle.rs</code>.</p>
+<h2 id="the-operation-trait">The Operation trait<a class="headerlink" href="#the-operation-trait" title="Permanent link">&para;</a></h2>
+<p>Here the implementation becomes specific to the requested operation (min, max, etc.).
+This is achieved using the <code>Operation</code> trait defined in <code>src/operation.rs</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="sd">/// Trait for active storage operations.</span>
+<span class="sd">///</span>
+<span class="sd">/// This forms the contract between the API layer and operations.</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">Operation</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="sd">/// Execute the operation.</span>
+<span class="w">    </span><span class="sd">///</span>
+<span class="w">    </span><span class="sd">/// Returns a [models::Response](crate::models::Response) object with response data.</span>
+<span class="w">    </span><span class="sd">///</span>
+<span class="w">    </span><span class="sd">/// # Arguments</span>
+<span class="w">    </span><span class="sd">///</span>
+<span class="w">    </span><span class="sd">/// * `request_data`: RequestData object for the request</span>
+<span class="w">    </span><span class="sd">/// * `data`: [`Vec&lt;u8&gt;`] containing data to operate on.</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span>
+<span class="w">        </span><span class="n">request_data</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="nc">models</span><span class="p">::</span><span class="n">RequestData</span><span class="p">,</span>
+<span class="w">        </span><span class="n">data</span><span class="p">:</span><span class="w"> </span><span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">u8</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nb">Result</span><span class="o">&lt;</span><span class="n">models</span><span class="p">::</span><span class="n">Response</span><span class="p">,</span><span class="w"> </span><span class="n">ActiveStorageError</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This interface accepts the request data and a byte array containing the storage chunk data in its original byte order.
+On success, it returns a <code>Response</code> struct which contains a byte array of the response data as well as the data type, shape and a count of non-missing elements in the array.</p>
+<p>A second <code>NumOperation</code> trait with an <code>execute_t</code> method handles the dynamic dispatch between the runtime data type in the request data and the generic implementation for that type.</p>
+<h2 id="operations">Operations<a class="headerlink" href="#operations" title="Permanent link">&para;</a></h2>
+<p>Each operation is implemented by a struct that implements the <code>NumOperation</code> trait.
+For example, the sum operation is implemented by the <code>Sum</code> struct in <code>src/operations.rs</code>.
+The <code>Sum</code> struct's <code>execute_t</code> method does the following:</p>
+<ul>
+<li>Zero copy conversion of the byte array to a multi-dimensional <a href="https://docs.rs/ndarray/latest/ndarray/type.ArrayView.html">ndarray::ArrayView</a> object of the data type, shape and byte order specified in the request data</li>
+<li>If a selection was specified in the request data, create a sliced <code>ndarray::ArrayView</code> onto the original array view</li>
+<li>If missing data was specified in the request data:</li>
+<li>Create an iterator over the array view that filters out missing data, performs the sum operation and counts non-missing elements</li>
+<li>Otherwise:</li>
+<li>Use the array view's native <code>sum</code> and <code>len</code> methods to take the sum and element count</li>
+<li>Convert the sum to a byte array and return with the element count</li>
+</ul>
+<p>The procedure for other operations varies slightly but generally follows the same pattern.</p>
+<h2 id="error-handling">Error handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h2>
+<p>The <code>ActiveStorageError</code> enum in <code>src/error.rs</code> describes the various errors that may be returned by the Reductionist API, as well as how to format them for the JSON error response body.
+Low-level errors are converted to higher-level errors and ultimately wrapped by <code>ActiveStorageError</code>.
+This is a common pattern in Rust and allows us to describe all of the errors that a function or application may return.</p>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<p>Reductionist configuration is implemented in <code>src/cli.rs</code> using the <a href="https://docs.rs/clap">clap</a> library, and accepts command line arguments and environment variables.</p>
+<h2 id="resource-management">Resource management<a class="headerlink" href="#resource-management" title="Permanent link">&para;</a></h2>
+<p>Reductionist supports optional restriction of resource usage.
+This is implemented in <code>src/resource_manager.rs</code> using <a href="https://docs.rs/tokio/latest/tokio/sync/struct.Semaphore.html">Tokio Semaphores</a>.
+This allows Reductionist to limit the quantity of various resources used at any time:</p>
+<ul>
+<li>S3 connections</li>
+<li>memory used for numeric data (this is more of a rough guide than a perfect limit)</li>
+<li>threads used for CPU-bound work</li>
+</ul>
+<h2 id="cpu-bound-work">CPU-bound work<a class="headerlink" href="#cpu-bound-work" title="Permanent link">&para;</a></h2>
+<p>There is particular friction between the asynchronous and synchronous types of work in the system.
+Axum and Tokio very efficiently handle the asynchronous aspects such as the HTTP server and S3 object download.
+The other work such as decompression, filtering and numerical operations are more CPU-bound, and can easily block the Tokio runtime from efficiently handling asynchronous tasks.
+Two alternative methods were developed to alleviate this issue.</p>
+<ol>
+<li>The resource manager can limit the number of threads used for CPU-bound work, by default leaving one CPU core free for handling asynchronous tasks.</li>
+<li>Integration with <a href="https://docs.rs/rayon">Rayon</a>, a library that provides a thread pool.</li>
+</ol>
+<p>Limited benchmarking was done to compare the two approaches, however the first appeared to have lower overhead.
+The second approach may leave the server more responsive if more CPU-heavy operations are used in future.</p>
+<h2 id="monitoring">Monitoring<a class="headerlink" href="#monitoring" title="Permanent link">&para;</a></h2>
+<p>Prometheus metrics are implemented in <code>src/metrics.rs</code> and are exposed by the Reductionist API under the <code>/metrics</code> path.
+These include:</p>
+<ul>
+<li>incoming requests (counter)</li>
+<li>outgoing response (counter)</li>
+<li>response time (histogram)</li>
+</ul>
+<h2 id="tracing-and-profiling">Tracing and profiling<a class="headerlink" href="#tracing-and-profiling" title="Permanent link">&para;</a></h2>
+<p>Reductionist integrates with Jaeger, a distributed tracing platform.
+Various sections of the request processing pipeline are instrumented with spans, making it easy to visualise the relative durations in the Jaeger UI.
+Testing with a sum over some CMIP6 temperature data, this showed that in terms of wall clock time, the S3 storage chunk download takes the majority of the time, followed by decompression, byte shuffle, and finally the actual numerical operation.</p>
+<p>Flame graphs created using <a href="https://docs.rs/flamegraph/">flamegraph-rs</a> were useful to visualise which parts of the code consume the most CPU cycles.
+This was useful to determine where to focus performance improvements, and showed that decompression is the most CPU-heavy task.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../deployment/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Deployment" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Deployment
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../contributing/" class="md-footer__link md-footer__link--next" aria-label="Next: Contributing" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Contributing
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>
