@@ -46,17 +46,17 @@ mime = "0.3"
 ndarray = "0.15"
 ndarray-stats = "0.5"
 num_cpus = "1"
-num-traits = "0.2.16"
+num-traits = "0.2.19"
 opentelemetry = "0.20"
 opentelemetry-jaeger = { version = "0.19", features = ["rt-tokio"] }
 prometheus = { version = "0.13", features = ["process"] }
-rayon = "1.7"
+rayon = "1.10"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 strum_macros = "0.24"
 thiserror = "1.0"
-time = "= 0.3.23"
-tokio = { version = "1.28", features = ["full"] }
+time = "=0.3.36"
+tokio = { version = "1.40", features = ["full"] }
 tokio-rayon = "2.1"
 tower = "0.4"
 tower-http = { version = "0.4", features = ["normalize-path", "trace", "validate-request"] }
@@ -66,7 +66,7 @@ tracing-opentelemetry = "0.21"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 url = { version = "2", features = ["serde"] }
 validator = { version = "0.16", features = ["derive"] }
-zerocopy = { version = "0.6.1", features = ["alloc", "simd"] }
+zerocopy = { version = "0.6.6", features = ["alloc", "simd"] }
 zune-inflate = "0.2.54"
 
 [dev-dependencies]

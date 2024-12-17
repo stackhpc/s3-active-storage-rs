@@ -21,22 +21,22 @@ Note: The original S3 Active Storage project was renamed to Reductionist, to avo
 
 Reductionist provides the following features:
 
-* HTTP(S) API with JSON request data
-* Access to data stored in S3-compatible storage
-* Basic numerical operations on multi-dimensional arrays (count, min, max, select, sum)
-* Perform calculations on a selection/slice of an array
-* Perform calculations allowing for missing data
-* Compressed data (GZip, Zlib)
-* Filtered data (byte shuffle)
-* Data with non-native byte order (endianness)
-* Server resource (CPU, memory, files) management
-* [Prometheus](https://prometheus.io/) metrics
-* Tracing with an option to send data to [Jaeger](https://www.jaegertracing.io/)
-* Ansible-based containerised deployment
+-   HTTP(S) API with JSON request data
+-   Access to data stored in S3-compatible storage
+-   Basic numerical operations on multi-dimensional arrays (count, min, max, select, sum)
+-   Perform calculations on a selection/slice of an array
+-   Perform calculations allowing for missing data
+-   Compressed data (GZip, Zlib)
+-   Filtered data (byte shuffle)
+-   Data with non-native byte order (endianness)
+-   Server resource (CPU, memory, files) management
+-   [Prometheus](https://prometheus.io/) metrics
+-   Tracing with an option to send data to [Jaeger](https://www.jaegertracing.io/)
+-   Ansible-based containerised deployment
 
 ## Related projects
 
-* [PyActiveStorage](https://github.com/valeriupredoi/PyActiveStorage) is a Python library which performs reductions on numerical data in data sources such as netCDF4. It has support for delegating computation to Reductionist when the data is stored in an S3-compatible object store.
+-   [PyActiveStorage](https://github.com/NCAS-CMS/PyActiveStorage) is a Python library which performs reductions on numerical data in data sources such as netCDF4. It has support for delegating computation to Reductionist when the data is stored in an S3-compatible object store.
 
 ## Contributing
 
