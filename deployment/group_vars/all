@@ -13,7 +13,7 @@ reductionist_image: "ghcr.io/stackhpc/reductionist-rs"
 reductionist_tag: "latest"
 # List of container networks.
 reductionist_networks:
-  - name: host
+  - host
 # Container environment.
 reductionist_env:
   OTEL_EXPORTER_JAEGER_AGENT_HOST: "{{ hostvars[(groups['jaeger'] | default([]) + [inventory_hostname])[0]].ansible_facts.default_ipv4.address }}"
@@ -21,7 +21,7 @@ reductionist_env:
   REDUCTIONIST_HTTPS: "true"
   REDUCTIONIST_PORT: "8081"
 # Path to certificates directory on remote host.
-reductionist_remote_certs_path: "{{ ansible_facts.env.HOME }}/.config/reductionist/certs"
+reductionist_remote_certs_path: "{{ ansible_facts.env.HOME }}/certs"
 # Path to certificates directory in container.
 reductionist_container_certs_path: "/root/.config/reductionist/certs"
 # List of container volume mounts.

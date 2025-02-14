@@ -5,7 +5,7 @@ The Ansible playbook allows for a secure, scale-out deployment of Reductionist, 
 
 The following services are supported:
 
-* Docker engine
+* Podman engine
 * Step CA Certificate Authority (generates certificates for Reductionist)
 * Step CLI (requests and renews certificates)
 * Minio object store (optional, for testing)
@@ -18,11 +18,11 @@ The following services are supported:
 
 The existence of correctly configured hosts is assumed by this playbook.
 
-The following host OS distributions are supported:
+The following host OS distributions have been tested and are supported:
 
-* Ubuntu 20.04-22.04
-* CentOS Stream 8-9
-* Rocky Linux 8-9
+* CentOS Stream 9
+* Rocky Linux 9
+* Ubuntu 24.04
 
 Currently only a single network is supported.
 Several TCP ports should be accessible on this network.
@@ -82,7 +82,7 @@ reductionist1
 reductionist
 
 # Do not edit.
-[docker:children]
+[podman:children]
 haproxy
 jaeger
 minio
@@ -133,21 +133,72 @@ ansible-galaxy collection install -r deployment/requirements.yml
 
 ## Deployment
 
-Run the playbook:
+Podman will be used to run containers under the same user account used for ansible deployment.
+To install requisite system packages some tasks will require sudo `privileged` access.
+
+To run the entire playbook as a non-privileged user prompting for a sudo password:
 ```sh
-ansible-playbook -i deployment/inventory deployment/site.yml
+ansible-playbook -i deployment/inventory deployment/site.yml -K
 ```
 
-If you want to run only specific plays in the playbook, the following tags are supported and may be specified via `--tags <tag1,tag2>`:
+To run specific plays the following tags are supported and may be specified via `--tags <tag1,tag2>`:
 
-* `docker`
+* `podman` - runs privileged tasks to install packages
 * `step-ca`
-* `step`
+* `step` - runs privileged tasks to install and the CA certificate
 * `minio`
 * `prometheus`
 * `jaeger`
 * `reductionist`
 * `haproxy`
+
+### Minimal deployment of Podman and the Reductionist
+
+Podman is a prerequisite for running the Reductionist.
+Podman can run containers as an **non-privileged** user, however this user must have **linger** enabled on their account to allow Podman to continue to run after logging out of the user session.
+
+To enable **linger** support for the non-privileged user:
+```sh
+sudo loginctl enable-linger <non-privileged user>
+```
+
+Alternatively, run the optional `podman` play to install Podman as an **non-privileged** user. The following will prompt for the sudo password to escalate privileges only for package installation and for enabling **linger** for the non-privileged user:
+```sh
+ansible-playbook -i deployment/inventory deployment/site.yml --tags podman -K
+```
+
+Then to run the `reductionist` play, again as the **non-privileged** user:
+```sh
+ansible-playbook -i deployment/inventory deployment/site.yml --tags reductionist
+```
+
+Podman containers require a manual restart after a system reboot.
+This requires logging into the host(s) running the Reductionist as the **non-privileged** user to run:
+```sh
+podman restart reductionist
+```
+
+Automatic restart on boot can be enabled via **systemd**, not covered by this documentation.
+
+### Using SSL/TLS certificates with the Reductionist
+
+To enable **https** connections edit `deployment/group_vars/all` before deployment as set:
+
+```
+REDUCTIONIST_HTTPS: "true"
+```
+
+Note, this is the default.
+
+Create a `certs` directory under the home directory of the non-privileged deployment user.
+Ensure the following files are added to the this directory:
+
+| Filename    | Description |
+| -------- | ------- |
+| certs/key.pem  | Private key file |
+| certs/cert.pem | Certificate file including any intermediates |
+
+Certificates can be added post Reductionist deployment but the Reductionist's container will need to be restarted afterwards.
 
 ## Usage
 
