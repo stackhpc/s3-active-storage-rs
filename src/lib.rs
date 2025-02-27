@@ -48,6 +48,7 @@
 
 pub mod app;
 pub mod array;
+pub mod chunk_cache;
 pub mod cli;
 pub mod compression;
 pub mod error;

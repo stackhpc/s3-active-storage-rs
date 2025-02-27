@@ -6,6 +6,7 @@ use tokio::sync::{Semaphore, SemaphorePermit};
 
 /// [crate::resource_manager::ResourceManager] provides a simple way to allocate various resources
 /// to tasks. Resource management is performed using a Tokio Semaphore for each type of resource.
+#[derive(Debug)]
 pub struct ResourceManager {
     /// Optional semaphore for S3 connections.
     s3_connections: Option<Semaphore>,

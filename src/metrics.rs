@@ -25,6 +25,11 @@ lazy_static! {
         },
         &["status_code", "http_method", "path"],
     ).expect("Prometheus metric options should be valid");
+    // Disk cache hit counter
+    pub static ref LOCAL_CACHE_MISSES: IntCounterVec = IntCounterVec::new(
+        Opts::new("cache_miss", "The number of times the requested chunk was not available in then local chunk cache"),
+        &["cache"]
+    ).expect("Prometheus metric options should be valid");
 }
 
 /// Registers various prometheus metrics with the global registry
@@ -38,6 +43,9 @@ pub fn register_metrics() {
         .expect("Prometheus metrics registration should not fail during initialization");
     registry
         .register(Box::new(RESPONSE_TIME_COLLECTOR.clone()))
+        .expect("Prometheus metrics registration should not fail during initialization");
+    registry
+        .register(Box::new(LOCAL_CACHE_MISSES.clone()))
         .expect("Prometheus metrics registration should not fail during initialization");
 }
 

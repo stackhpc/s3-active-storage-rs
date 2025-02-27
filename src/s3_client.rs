@@ -1,6 +1,8 @@
 //! A simplified S3 client that supports downloading objects.
 //! It attempts to hide the complexities of working with the AWS SDK for S3.
 
+use std::fmt::Display;
+
 use crate::error::ActiveStorageError;
 use crate::resource_manager::ResourceManager;
 
@@ -92,6 +94,20 @@ impl S3ClientMap {
 pub struct S3Client {
     /// Underlying AWS SDK S3 client object.
     client: Client,
+    /// A unique identifier for the client
+    // TODO: Make this a hash of url + access key + secret key
+    // using https://github.com/RustCrypto/hashes?tab=readme-ov-file
+    // This will be more urgently required once an ageing mechanism
+    // is implemented for [crate::S3ClientMap].
+    id: String,
+}
+
+// Required so that client can be used as part of the lookup
+// key for a local chunk cache.
+impl Display for S3Client {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.id)
+    }
 }
 
 impl S3Client {
@@ -120,7 +136,10 @@ impl S3Client {
             .force_path_style(true)
             .build();
         let client = Client::from_conf(s3_config);
-        Self { client }
+        Self {
+            client,
+            id: uuid::Uuid::new_v4().to_string(),
+        }
     }
 
     /// Downloads an object from object storage and returns the data as Bytes
@@ -156,9 +175,10 @@ impl S3Client {
             .try_into()?;
 
         // FIXME: how to account for compressed data?
-        if mem_permits.is_none() {
+        if mem_permits.is_none() || mem_permits.as_ref().unwrap().num_permits() == 0 {
             *mem_permits = resource_manager.memory(content_length).await?;
         };
+
         // The data returned by the S3 client does not have any alignment guarantees. In order to
         // reinterpret the data as an array of numbers with a higher alignment than 1, we need to
         // return the data in Bytes object in which the underlying data has a higher alignment.
